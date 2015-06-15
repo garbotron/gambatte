@@ -25,6 +25,7 @@
 #include "sound.h"
 #include "tima.h"
 #include "video.h"
+#include "gamelink.h"
 
 namespace gambatte {
 
@@ -109,6 +110,18 @@ public:
 	void setGameShark(std::string const &codes) { interrupter_.setGameShark(codes); }
 	void updateInput();
 
+	// true if we are currently engaged in a serial I/O transaction with an external clock
+	bool serialIsListeningExternal();
+
+	// shift in/out a bit of serial data - used by external serial hosts
+	bool serialDataShift(bool input);
+
+	// create a handle that can be used by other gameboys/adapters to provide serial input
+	GameLink *createGameLink();
+
+	// set a handle to use when pushing serial data across the game link cable
+	void setGameLink(GameLink *gameLink) { gameLink_ = gameLink; }
+
 private:
 	Cartridge cart_;
 	unsigned char ioamhram_[0x200];
@@ -125,6 +138,8 @@ private:
 	unsigned char oamDmaPos_;
 	unsigned char serialCnt_;
 	bool blanklcd_;
+	GameLink *gameLink_;
+	int temp;
 
 	void decEventCycles(IntEventId eventId, unsigned long dec);
 	void oamDmaInitSetup();

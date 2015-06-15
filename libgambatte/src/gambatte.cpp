@@ -209,4 +209,12 @@ void GB::setGameShark(std::string const &codes) {
 	p_->cpu.setGameShark(codes);
 }
 
+GameLink *GB::createGameLink() { 
+	return p_->cpu.createGameLink();
+}
+
+void GB::setGameLink(GameLink *gameLink) {
+	p_->cpu.setGameLink(gameLink);
+}
+
 }

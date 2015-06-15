@@ -22,6 +22,7 @@
 #include "gbint.h"
 #include "inputgetter.h"
 #include "loadres.h"
+#include "gamelink.h"
 #include <cstddef>
 #include <string>
 
@@ -179,6 +180,16 @@ public:
 	  * @param codes Game Shark codes in format 01HHHHHH;01HHHHHH;... where H is [0-9]|[A-F]
 	  */
 	void setGameShark(std::string const &codes);
+
+	/**
+	  * Create a handle that can be used by other gameboys/adapters to provide serial input.
+	  */
+	GameLink *createGameLink();
+
+	/**
+	  * Set a handle to use when pushing serial data across the game link cable.
+	  */
+	void setGameLink(GameLink *gameLink);
 
 private:
 	struct Priv;

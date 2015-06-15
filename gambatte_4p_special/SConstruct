@@ -1,0 +1,27 @@
+import subprocess
+cflags   = ARGUMENTS.get('CFLAGS', '-Wall -Wextra -Werror -O2 -fomit-frame-pointer')
+cxxflags = ARGUMENTS.get('CXXFLAGS', cflags + ' -fno-exceptions -fno-rtti')
+vars = Variables()
+vars.Add('CC')
+vars.Add('CXX')
+
+env = Environment(CPPPATH = ['src', 'ext/glfw', '../libgambatte/include', '../common'],
+                  CFLAGS = cflags,
+                  CXXFLAGS = cxxflags,
+                  CPPDEFINES = [ {'HAVE_STDINT_H': None}, {'GLFW_DLL': None} ],
+                  LIBS = ['mingw32', 'opengl32'],
+                  variables = vars,
+                  tools = ['mingw'])
+
+sourceFiles = Split('''
+
+    ../libgambatte/libgambatte.a
+    ext/glfw/glfw3dll.a
+
+''')
+
+conf = env.Configure()
+conf.CheckLib('z')
+conf.Finish()
+
+env.Program('gambatte_4p_special', [env.Object('src/gambatte_4p_special.cpp')] + sourceFiles)
